@@ -1,20 +1,37 @@
-body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f7f6; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f8fafc; }
 .hidden { display: none !important; }
 
-/* ያሸበረቀ ስፕላሽ ስክሪን */
+/* Splash Screen */
 #splash-screen {
     position: fixed; width: 100%; height: 100vh;
     background: linear-gradient(135deg, #1e3a8a, #8b5cf6, #ec4899);
-    display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
 }
-.splash-text { color: white; text-align: center; animation: pulse 2s infinite; }
-@keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+
+/* Grade Grid Layout */
+.grade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.grade-card {
+    border-radius: 20px; padding: 25px 20px; color: white;
+    text-align: left; position: relative; height: 130px;
+    cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.grade-card h2 { font-size: 45px; margin: 0; font-weight: bold; }
+.grade-card p { margin: 5px 0; font-size: 14px; font-weight: 500; }
+.grade-card .icon { position: absolute; top: 15px; left: 15px; font-size: 22px; opacity: 0.9; }
+.grade-card .arrow { position: absolute; top: 15px; right: 15px; font-size: 20px; }
+
+.g9 { background: #2563eb; } .g10 { background: #9333ea; }
+.g11 { background: #10b981; } .g12 { background: #f59e0b; }
+
+/* Telegram Style List */
+.media-list { background: white; border-radius: 15px; overflow: hidden; margin-top: 10px; }
+.media-item {
+    display: flex; align-items: center; padding: 15px;
+    border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;
+}
+.media-item:hover { background: #f8fafc; }
+.media-icon { margin-right: 15px; font-size: 20px; }
 
 .container { padding: 15px; max-width: 600px; margin: auto; }
-button { 
-    width: 100%; padding: 16px; margin: 10px 0; border-radius: 15px; border: none;
-    background: #1e3a8a; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
-}
-.back-btn { background: #64748b !important; width: auto; padding: 10px 20px; }
-.grade-btn { background: linear-gradient(90deg, #3b82f6, #2dd4bf); }
-input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+button { width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; }
+input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #e2e8f0; box-sizing: border-box; }
