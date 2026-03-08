@@ -1,31 +1,63 @@
-<div id="main-dashboard" class="hidden">
-    <div class="container">
-        <div id="announcement-area" style="background:#fef3c7; padding:10px; border-radius:10px; margin-bottom:10px;" class="hidden"></div>
-        
-        <div id="admin-only" class="hidden" style="background:#e0e7ff; padding:10px; border-radius:12px; margin-bottom:10px;">
-            <textarea id="notice-msg" placeholder="ለሁሉም የሚተላለፍ ማስታወቂያ..." style="width:100%; border-radius:10px; padding:10px;"></textarea>
-            <button onclick="sendNotice()" style="background:#4338ca;">ማስታወቂያ አስተላልፍ 📢</button>
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mertule Maryam School App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="splash-screen">
+        <div style="text-align:center; color:white;">
+            <h2>እንኳን ወደ መርጡለ ማሪያም School app በደህና መጣቹህ</h2>
+            <h1 style="background: white; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(45deg, #ff00cc, #3333ff);">በ በረከት ቀናው የተዘጋጀ</h1>
         </div>
-
-        <div id="teacher-tools" class="hidden">
-            <button onclick="document.getElementById('file-up').click()" style="background:#059669;">📸 ፋይል/ፎቶ/ቪዲዮ ይጫኑ</button>
-            <input type="file" id="file-up" class="hidden" accept="image/*,video/*,.pdf" multiple>
-        </div>
-
-        <div id="grade-view">
-            <h3 style="color:#1e3a8a;">የክፍል ደረጃዎች</h3>
-            <button class="grade-btn" onclick="showSubjects(9)">9ኛ ክፍል (2018)</button>
-            <button class="grade-btn" onclick="showSubjects(10)">10ኛ ክፍል (2018)</button>
-            <button class="grade-btn" onclick="showSubjects(11)">11ኛ ክፍል</button>
-            <button class="grade-btn" onclick="showSubjects(12)">12ኛ ክፍል</button>
-        </div>
-
-        <div id="content-view" class="hidden">
-            <button class="back-btn" onclick="goBack()">⬅ ተመለስ</button>
-            <h4 id="title-text"></h4>
-            <div id="list-area"></div>
-        </div>
-        
-        <button onclick="logOut()" style="background:red; margin-top:20px;">Log Out (ውጣ)</button>
     </div>
-</div>
+
+    <div id="registration-page" class="hidden">
+        <div class="container">
+            <h3>የምዝገባ ፎርም</h3>
+            <input type="text" id="fname" placeholder="ስም">
+            <input type="text" id="lname" placeholder="የአባት ስም">
+            <input type="tel" id="phone" placeholder="ስልክ (09.../07...)">
+            <select id="role" onchange="toggleCode()"><option value="student">ተማሪ</option><option value="teacher">መምህር</option><option value="admin">አስተዳዳሪ</option></select>
+            <input type="password" id="code" class="hidden" placeholder="ኮድ ያስገቡ">
+            <button onclick="handleLogin()" style="background:#1e3a8a; color:white;">ይግቡ</button>
+        </div>
+    </div>
+
+    <div id="main-dashboard" class="hidden">
+        <div class="container">
+            <div id="announcement-area" style="background:#fef3c7; padding:10px; border-radius:10px; margin-bottom:10px;" class="hidden"></div>
+            
+            <div id="admin-only" class="hidden" style="background:#fff; padding:15px; border-radius:15px; border:1px solid #eee; margin-bottom:15px;">
+                <textarea id="notice-msg" placeholder="ማስታወቂያ ይፃፉ..." style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;"></textarea>
+                <button onclick="sendNotice()" style="background:#1e3a8a; color:white;">ማስታወቂያ አስተላልፍ 📢</button>
+            </div>
+
+            <div id="grade-view">
+                <h3 style="color:#1e3a8a; margin-left:5px;">ክፍል ይምረጡ</h3>
+                <div class="grade-grid">
+                    <div class="grade-card g9" onclick="showSubjects(9)"><span class="icon">🎓</span><span class="arrow">→</span><h2>9</h2><p>Grade 9</p></div>
+                    <div class="grade-card g10" onclick="showSubjects(10)"><span class="icon">🎓</span><span class="arrow">→</span><h2>10</h2><p>Grade 10</p></div>
+                    <div class="grade-card g11" onclick="showSubjects(11)"><span class="icon">🎓</span><span class="arrow">→</span><h2>11</h2><p>Grade 11<br>Natural & Social</p></div>
+                    <div class="grade-card g12" onclick="showSubjects(12)"><span class="icon">🎓</span><span class="arrow">→</span><h2>12</h2><p>Grade 12<br>Natural & Social</p></div>
+                </div>
+            </div>
+
+            <div id="content-view" class="hidden">
+                <button onclick="goBack()" style="background:#f1f5f9; color:#334155; width:auto; padding:8px 20px;">⬅ ተመለስ</button>
+                <div id="teacher-tools" class="hidden" style="margin:10px 0;">
+                    <button onclick="document.getElementById('file-up').click()" style="background:#10b981; color:white;">📸 ፋይል ይጫኑ</button>
+                    <input type="file" id="file-up" class="hidden" accept="image/*,video/*,.pdf" multiple>
+                </div>
+                <h4 id="title-text" style="color:#1e3a8a; margin:10px 0;"></h4>
+                <div id="list-area"></div>
+            </div>
+            
+            <button onclick="logOut()" style="background:#ef4444; color:white; margin-top:30px;">Log Out</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
