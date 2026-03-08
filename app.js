@@ -1,89 +1,77 @@
-// Auto-Update ሎጂክ
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').then(reg => {
-        reg.onupdatefound = () => {
-            const installingWorker = reg.installing;
-            installingWorker.onstatechange = () => {
-                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    window.location.reload(); 
-                }
-            };
-        };
-    });
-}
-
-// Splash Screen
 setTimeout(() => {
     document.getElementById('splash-screen').classList.add('hidden');
     if(localStorage.getItem('isLogged')) showDashboard();
     else document.getElementById('registration-page').classList.remove('hidden');
 }, 4000);
 
-function toggleCodeInput() {
+function toggleCode() {
     const role = document.getElementById('role').value;
-    document.getElementById('code-section').classList.toggle('hidden', role === 'student');
+    document.getElementById('code').classList.toggle('hidden', role === 'student');
 }
 
-function handleRegister() {
+function handleLogin() {
     const role = document.getElementById('role').value;
-    const code = document.getElementById('access-code').value;
-    const name = document.getElementById('fname').value;
+    const code = document.getElementById('code').value;
+    const phone = document.getElementById('phone').value;
 
-    if(role === 'teacher' && code !== '121619') { alert("የመምህር ኮድ ስህተት!"); return; }
-    if(role === 'admin' && code !== '12161921') { alert("የአስተዳደር ኮድ ስህተት!"); return; }
+    if(!phone.startsWith('09') && !phone.startsWith('07')) { alert("የቴሌ ስልክ ብቻ ይጠቀሙ!"); return; }
+    if(role === 'teacher' && code !== '121619') { alert("ስህተት!"); return; }
+    if(role === 'admin' && code !== '12161921') { alert("ስህተት!"); return; }
 
     localStorage.setItem('isLogged', 'true');
     localStorage.setItem('role', role);
-    localStorage.setItem('name', name);
+    localStorage.setItem('name', document.getElementById('fname').value);
     showDashboard();
 }
 
 function showDashboard() {
     document.getElementById('registration-page').classList.add('hidden');
     document.getElementById('main-dashboard').classList.remove('hidden');
-    document.getElementById('welcome-msg').innerText = "ሰላም " + localStorage.getItem('name');
+    const role = localStorage.getItem('role');
+    if(role !== 'student') document.getElementById('admin-tools').classList.remove('hidden');
     
-    if(localStorage.getItem('role') !== 'student') {
-        document.getElementById('admin-tools').classList.remove('hidden');
+    const savedNotice = localStorage.getItem('globalNotice');
+    if(savedNotice) {
+        document.getElementById('announcement-area').classList.remove('hidden');
+        document.getElementById('announcement-area').innerText = "ማሳሰቢያ፡ " + savedNotice;
     }
 }
 
 function showSubjects(grade) {
-    document.getElementById('grade-selection').classList.add('hidden');
-    document.getElementById('subject-section').classList.remove('hidden');
-    document.getElementById('grade-title').innerText = grade + "ኛ ክፍል";
-
-    if(grade >= 11) {
-        document.getElementById('stream-selection').classList.remove('hidden');
-        document.getElementById('subject-list').innerHTML = '';
-    } else {
-        document.getElementById('stream-selection').classList.add('hidden');
-        renderSubjects(['Maths', 'English', 'Biology', 'Chemistry', 'Physics', 'History', 'Geography', 'Civics', 'Amharic', 'Economics']);
-    }
-}
-
-function setStream(stream) {
-    let subjects = stream === 'Natural' ? ['Maths', 'English', 'Physics', 'Chemistry', 'Biology'] : ['Maths', 'English', 'History', 'Geography', 'Economics'];
-    renderSubjects(subjects);
-}
-
-function renderSubjects(subs) {
-    const list = document.getElementById('subject-list');
+    document.getElementById('grade-view').classList.add('hidden');
+    document.getElementById('content-view').classList.remove('hidden');
+    document.getElementById('title-text').innerText = grade + "ኛ ክፍል";
+    
+    let list = document.getElementById('list-area');
     list.innerHTML = '';
-    subs.forEach(s => {
-        const btn = document.createElement('button');
-        btn.innerText = s + " (PDF/Video)";
-        btn.onclick = () => alert(s + " ክፍል ተመርጧል።");
+    
+    let subjects = grade <= 10 ? ['Maths', 'English', 'Biology', 'Chemistry', 'Physics', 'History', 'Geography', 'Civics', 'Amharic', 'Economics'] : ['Natural Stream', 'Social Stream'];
+    
+    subjects.forEach(s => {
+        let btn = document.createElement('button');
+        btn.innerText = s;
+        btn.onclick = () => showMediaOptions(s);
         list.appendChild(btn);
     });
 }
 
-function logOut() {
-    localStorage.clear();
+function showMediaOptions(subject) {
+    document.getElementById('list-area').innerHTML = `
+        <h5>${subject} - ይዘቶች</h5>
+        <button onclick="alert('PDF በመከፈት ላይ...')">📄 PDF</button>
+        <button onclick="alert('ቪዲዮ በመጫን ላይ...')">🎬 Video</button>
+        <button onclick="alert('ምስል በመከፈት ላይ...')">🖼️ Image</button>
+        <button onclick="alert('ጽሁፍ...')">✍️ Text</button>
+        <button onclick="alert('ቻት...')">💬 Chat</button>
+    `;
+}
+
+function sendNotice() {
+    const msg = document.getElementById('notice-msg').value;
+    localStorage.setItem('globalNotice', msg);
+    alert("ማስታወቂያ ተላልፏል!");
     location.reload();
 }
 
-function backToGrades() {
-    document.getElementById('subject-section').classList.add('hidden');
-    document.getElementById('grade-selection').classList.remove('hidden');
-}
+function logOut() { localStorage.clear(); location.reload(); }
+function goBack() { location.reload(); }
