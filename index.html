@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mertule Maryam School App</title>
+    <title>Mertule Maryam App</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="splash-screen">
         <div class="splash-frame">
             <p>እንኳን ወደ መርጡለ ማሪያም School app በደህና መጣችሁ</p>
@@ -18,18 +17,15 @@
 
     <div id="registration-page" class="hidden">
         <div class="container">
-            <h2 style="text-align:center; color:#1e3a8a;">የምዝገባ ፎርም</h2>
-            <input type="text" id="fname" placeholder="ስም" style="width:100%; padding:12px; margin:5px 0; border-radius:8px; border:1px solid #ccc;">
-            <input type="tel" id="phone" placeholder="ስልክ (09...)" style="width:100%; padding:12px; margin:5px 0; border-radius:8px; border:1px solid #ccc;">
-            
-            <select id="role" onchange="toggleCodeInput()" style="width:100%; padding:12px; margin:5px 0; border-radius:8px;">
+            <h2>የምዝገባ ፎርም</h2>
+            <input type="text" id="fname" placeholder="ስም" style="width:94%; padding:12px; margin-bottom:10px;">
+            <select id="role" onchange="toggleCodeInput()" style="width:100%; padding:12px;">
                 <option value="student">ተማሪ</option>
                 <option value="teacher">መምህር</option>
-                <option value="admin">ርዕሰ መምህር/አስተዳደር</option>
+                <option value="admin">አስተዳዳሪ</option>
             </select>
-
             <div id="code-section" class="hidden">
-                <input type="password" id="access-code" placeholder="የመለያ ኮድ ያስገቡ" style="width:100%; padding:12px; margin:5px 0; border-radius:8px; border:1px solid #ccc;">
+                <input type="password" id="access-code" placeholder="ኮድ ያስገቡ" style="width:94%; padding:12px; margin-top:10px;">
             </div>
             <button onclick="handleRegister()">ይግቡ</button>
         </div>
@@ -37,47 +33,26 @@
 
     <div id="main-dashboard" class="hidden">
         <div class="container">
-            <h3 id="user-welcome"></h3>
-            <div id="admin-upload-section" class="hidden content-box">
-                <h4>ፋይል መጫኛ (Admin Only)</h4>
-                <input type="file" id="file-upload" accept="image/*,video/*,.pdf" multiple>
-                <button onclick="alert('ፋይሉ በትክክል ተጭኗል!')" style="background:#059669;">ጭን (Upload)</button>
+            <h3 id="welcome-msg"></h3>
+            <div id="admin-tools" class="hidden">
+                <button onclick="document.getElementById('file-input').click()">📸 ፋይል/ፎቶ ምረጥ</button>
+                <input type="file" id="file-input" class="hidden" accept="image/*,video/*,.pdf">
             </div>
-
-            <div id="grade-selection">
-                <h4>ክፍል ይምረጡ</h4>
-                <div class="grade-grid">
-                    <button onclick="showSubjects(9)">9ኛ ክፍል</button>
-                    <button onclick="showSubjects(10)">10ኛ ክፍል</button>
-                    <button onclick="showSubjects(11)">11ኛ ክፍል</button>
-                    <button onclick="showSubjects(12)">12ኛ ክፍል</button>
-                </div>
+            <div id="grade-list">
+                <button onclick="selectGrade(9)">9ኛ ክፍል</button>
+                <button onclick="selectGrade(10)">10ኛ ክፍል</button>
+                <button onclick="selectGrade(11)">11ኛ ክፍል</button>
+                <button onclick="selectGrade(12)">12ኛ ክፍል</button>
             </div>
-
-            <div id="subject-section" class="hidden">
-                <button onclick="backToGrades()" style="background:#6b7280;">ወደ ኋላ ተመለስ</button>
-                <h4 id="grade-title"></h4>
-                <div id="stream-selection" class="hidden">
-                    <button onclick="setStream('Natural')">Natural Stream</button>
-                    <button onclick="setStream('Social')">Social Stream</button>
-                </div>
-                <div id="subject-list" class="subject-grid"></div>
-            </div>
-
-            <div id="content-menu" class="hidden">
-                <button onclick="backToSubjects()" style="background:#6b7280;">ወደ ትምህርቶች ተመለስ</button>
-                <h4 id="subject-title"></h4>
-                <div class="subject-grid">
-                    <button onclick="openFeature('PDF')">📄 PDF</button>
-                    <button onclick="openFeature('Video')">🎬 Video</button>
-                    <button onclick="openFeature('Image')">🖼️ Image</button>
-                    <button onclick="openFeature('Text')">✍️ Text</button>
-                    <button onclick="openFeature('Chat')">💬 Chat</button>
-                </div>
-            </div>
+            <button class="logout-btn" onclick="logOut()">Log Out (ውጣ)</button>
         </div>
     </div>
 
     <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js?v=2');
+        }
+    </script>
 </body>
 </html>
