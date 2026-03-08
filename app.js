@@ -13,11 +13,9 @@ function handleLogin() {
     const role = document.getElementById('role').value;
     const code = document.getElementById('code').value;
     const phone = document.getElementById('phone').value;
-
-    if(!phone.startsWith('09') && !phone.startsWith('07')) { alert("የቴሌ ስልክ ብቻ ይጠቀሙ!"); return; }
+    if(!phone.startsWith('09') && !phone.startsWith('07')) { alert("የቴሌ ስልክ ብቻ!"); return; }
     if(role === 'teacher' && code !== '121619') { alert("ስህተት!"); return; }
     if(role === 'admin' && code !== '12161921') { alert("ስህተት!"); return; }
-
     localStorage.setItem('isLogged', 'true');
     localStorage.setItem('role', role);
     localStorage.setItem('name', document.getElementById('fname').value);
@@ -27,29 +25,21 @@ function handleLogin() {
 function showDashboard() {
     document.getElementById('registration-page').classList.add('hidden');
     document.getElementById('main-dashboard').classList.remove('hidden');
-    const role = localStorage.getItem('role');
-    if(role !== 'student') document.getElementById('admin-tools').classList.remove('hidden');
-    
-    const savedNotice = localStorage.getItem('globalNotice');
-    if(savedNotice) {
-        document.getElementById('announcement-area').classList.remove('hidden');
-        document.getElementById('announcement-area').innerText = "ማሳሰቢያ፡ " + savedNotice;
-    }
+    if(localStorage.getItem('role') === 'admin') document.getElementById('admin-only').classList.remove('hidden');
+    const n = localStorage.getItem('globalNotice');
+    if(n) { document.getElementById('announcement-area').classList.remove('hidden'); document.getElementById('announcement-area').innerText = "ማሳሰቢያ: " + n; }
 }
 
 function showSubjects(grade) {
     document.getElementById('grade-view').classList.add('hidden');
     document.getElementById('content-view').classList.remove('hidden');
     document.getElementById('title-text').innerText = grade + "ኛ ክፍል";
-    
     let list = document.getElementById('list-area');
     list.innerHTML = '';
-    
-    let subjects = grade <= 10 ? ['Maths', 'English', 'Biology', 'Chemistry', 'Physics', 'History', 'Geography', 'Civics', 'Amharic', 'Economics'] : ['Natural Stream', 'Social Stream'];
-    
-    subjects.forEach(s => {
+    let subs = grade <= 10 ? ['Maths', 'English', 'Biology', 'Chemistry', 'Physics', 'History', 'Geography', 'Civics', 'Amharic', 'Economics'] : ['Natural Stream', 'Social Stream'];
+    subs.forEach(s => {
         let btn = document.createElement('button');
-        btn.innerText = s;
+        btn.innerText = s; btn.style.background = "white"; btn.style.color = "#333"; btn.style.textAlign = "left";
         btn.onclick = () => showMediaOptions(s);
         list.appendChild(btn);
     });
@@ -57,21 +47,31 @@ function showSubjects(grade) {
 
 function showMediaOptions(subject) {
     document.getElementById('list-area').innerHTML = `
-        <h5>${subject} - ይዘቶች</h5>
-        <button onclick="alert('PDF በመከፈት ላይ...')">📄 PDF</button>
-        <button onclick="alert('ቪዲዮ በመጫን ላይ...')">🎬 Video</button>
-        <button onclick="alert('ምስል በመከፈት ላይ...')">🖼️ Image</button>
-        <button onclick="alert('ጽሁፍ...')">✍️ Text</button>
-        <button onclick="alert('ቻት...')">💬 Chat</button>
+        <div class="media-list">
+            <div class="media-item" onclick="alert('PDF')"><span class="media-icon">📄</span> All PDF Files</div>
+            <div class="media-item" onclick="alert('Video')"><span class="media-icon">🎬</span> All Video Lessons</div>
+            <div class="media-item" onclick="alert('Image')"><span class="media-icon">🖼️</span> Images/Diagrams</div>
+            <div class="media-item" onclick="alert('Text')"><span class="media-icon">✍️</span> Short Notes</div>
+            <div class="media-item" onclick="alert('Chat')"><span class="media-icon">💬</span> Discussion Chat</div>
+        </div>
     `;
+    if(localStorage.getItem('role') !== 'student') document.getElementById('teacher-tools').classList.remove('hidden');
+}
+
+function goBack() {
+    const list = document.getElementById('list-area');
+    if(list.innerHTML.includes('media-item')) {
+        showSubjects(parseInt(document.getElementById('title-text').innerText));
+        document.getElementById('teacher-tools').classList.add('hidden');
+    } else {
+        document.getElementById('content-view').classList.add('hidden');
+        document.getElementById('grade-view').classList.remove('hidden');
+    }
 }
 
 function sendNotice() {
-    const msg = document.getElementById('notice-msg').value;
-    localStorage.setItem('globalNotice', msg);
-    alert("ማስታወቂያ ተላልፏል!");
-    location.reload();
+    const m = document.getElementById('notice-msg').value;
+    if(m) { localStorage.setItem('globalNotice', m); alert("ተልኳል!"); location.reload(); }
 }
 
 function logOut() { localStorage.clear(); location.reload(); }
-function goBack() { location.reload(); }
