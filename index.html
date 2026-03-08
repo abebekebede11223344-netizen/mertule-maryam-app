@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>መርጡ ለማርያም ትምህርት ቤት</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e3a8a">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div id="splash-screen">
-        <h1 class="fade-in">በበረከት ቀናው የተዘጋጀ</h1>
+        <div class="splash-content">
+            <h1 class="fade-in">በበረከት ቀናው የተዘጋጀ</h1>
+        </div>
     </div>
 
     <div id="registration-page" class="hidden">
@@ -16,35 +23,60 @@
             <h2>የምዝገባ ፎርም</h2>
             <input type="text" id="fname" placeholder="ስም">
             <input type="text" id="lname" placeholder="የአባት ስም">
-            <input type="tel" id="phone" placeholder="ስልክ (09... ብቻ)">
+            <input type="tel" id="phone" placeholder="ስልክ (09... ወይም 07...)">
             <input type="number" id="age" placeholder="እድሜ">
+            
+            <select id="gender">
+                <option value="">ፆታ</option>
+                <option value="ወንድ">ወንድ</option>
+                <option value="ሴት">ሴት</option>
+            </select>
+            
             <select id="role" onchange="toggleCodeInput()">
                 <option value="student">ተማሪ</option>
                 <option value="teacher">መምህር</option>
-                <option value="admin">አስተዳደር</option>
+                <option value="admin">ርዕሰ መምህር/አስተዳደር</option>
             </select>
+
             <div id="code-section" class="hidden">
                 <input type="password" id="access-code" placeholder="የመለያ ኮድ ያስገቡ">
             </div>
+
             <button onclick="handleRegister()">ይግቡ</button>
         </div>
     </div>
 
     <div id="main-dashboard" class="hidden">
         <div class="header">
-            <input type="text" id="search" placeholder="ፈልግ...">
-            <button id="back-btn">ተመለስ</button>
+            <input type="text" id="search-box" placeholder="ከአፑ ውስጥ ይፈልጉ...">
+            <button id="back-btn" onclick="goBack()">ተመለስ</button>
         </div>
-        <div id="grade-selection">
+
+        <div id="grade-selection" class="container">
             <h3>ክፍልዎን ይምረጡ</h3>
-            <button onclick="showGrade(9)">9ኛ ክፍል</button>
-            <button onclick="showGrade(10)">10ኛ ክፍል</button>
-            <button onclick="showGrade(11)">11ኛ ክፍል</button>
-            <button onclick="showGrade(12)">12ኛ ክፍል</button>
+            <div class="grade-grid">
+                <button onclick="selectGrade(9)">9ኛ ክፍል</button>
+                <button onclick="selectGrade(10)">10ኛ ክፍል</button>
+                <button onclick="selectGrade(11)">11ኛ ክፍል</button>
+                <button onclick="selectGrade(12)">12ኛ ክፍል</button>
+            </div>
         </div>
-        <div id="content-display" class="hidden"></div>
+
+        <div id="subject-area" class="hidden container">
+            <h3 id="selected-title"></h3>
+            <div id="subjects-list"></div>
+        </div>
     </div>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker Registered'))
+                    .catch(err => console.log('Service Worker Failed', err));
+            });
+        }
+    </script>
     <script src="app.js"></script>
 </body>
 </html>
