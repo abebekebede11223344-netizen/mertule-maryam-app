@@ -1,9 +1,9 @@
-// Splash Screen ለ 2 ሰከንድ
+// 1. Splash Screen & Login Logic
 setTimeout(() => {
-    document.getElementById('splash-screen').style.display = 'none';
-    const isLogged = localStorage.getItem('logged_in');
+    document.getElementById('splash-screen').classList.add('hidden');
+    const isLogged = localStorage.getItem('isLogged');
     if (isLogged) {
-        document.getElementById('main-dashboard').classList.remove('hidden');
+        showDashboard();
     } else {
         document.getElementById('registration-page').classList.remove('hidden');
     }
@@ -22,19 +22,26 @@ function handleRegister() {
     if (!phone.startsWith('09') && !phone.startsWith('07')) {
         alert("የኢትዮ ቴሌኮም ቁጥር ብቻ ይጠቀሙ!"); return;
     }
-    if (role === 'teacher' && code !== '1221') { alert("ኮድ ስህተት ነው!"); return; }
-    if (role === 'admin' && code !== '2127') { alert("ኮድ ስህተት ነው!"); return; }
+    if (role === 'teacher' && code !== '1221') { alert("የመምህር ኮድ ስህተት ነው!"); return; }
+    if (role === 'admin' && code !== '2127') { alert("የአስተዳደር ኮድ ስህተት ነው!"); return; }
 
-    localStorage.setItem('logged_in', 'true');
-    localStorage.setItem('user_role', role);
-    document.getElementById('registration-page').classList.add('hidden');
-    document.getElementById('main-dashboard').classList.remove('hidden');
+    localStorage.setItem('isLogged', 'true');
+    localStorage.setItem('userRole', role);
+    showDashboard();
 }
 
-// የክፍል ምርጫ እና የትምህርት አይነቶች
+// 2. Dashboard & Grade Selection
+function showDashboard() {
+    document.getElementById('registration-page').classList.add('hidden');
+    document.getElementById('main-dashboard').classList.remove('hidden');
+    
+    const role = localStorage.getItem('userRole');
+    if (role === 'admin') showAdminOptions();
+}
+
 function selectGrade(grade) {
     const subjectArea = document.getElementById('subject-area');
-    const subjectsList = document.getElementById('subjects-list');
+    const list = document.getElementById('subjects-list');
     const title = document.getElementById('selected-title');
     
     document.getElementById('grade-selection').classList.add('hidden');
@@ -43,68 +50,75 @@ function selectGrade(grade) {
 
     let subjects = [];
     if (grade == 9 || grade == 10) {
-        subjects = ['Maths', 'English', 'Biology', 'Chemistry', 'Physics', 'Geography', 'History'];
+        subjects = ['Biology', 'Chemistry', 'Physics', 'Maths', 'English', 'Civics'];
     } else {
-        subjects = ['Social Stream', 'Natural Stream'];
+        subjects = ['Natural Stream', 'Social Stream'];
     }
 
-    subjectsList.innerHTML = '';
+    list.innerHTML = '';
     subjects.forEach(sub => {
         const btn = document.createElement('button');
         btn.innerText = sub;
-        btn.onclick = () => sub.includes('Stream') ? showStream(sub, grade) : openSubject(sub, grade);
-        subjectsList.appendChild(btn);
+        btn.onclick = () => openSubjectMenu(sub, grade);
+        list.appendChild(btn);
     });
 
-    // ለ 12ኛ ክፍል ብቻ የብሄራዊ ፈተና መለማመጃ መጨመር
     if (grade == 12) {
         const examBtn = document.createElement('button');
         examBtn.innerText = "የብሔራዊ ፈተና መለማመጃ 📝";
         examBtn.style.background = "#d97706";
         examBtn.onclick = () => startExam();
-        subjectsList.appendChild(examBtn);
+        list.appendChild(examBtn);
     }
 }
 
-// የብሄራዊ ፈተና መለማመጃ ሎጂክ (90 ሰከንድ ታይመር)
-let timer;
+// 3. Exam System (90 Seconds)
+let examTimer;
 function startExam() {
     let timeLeft = 90;
-    alert("ፈተናው ተጀምሯል! ለእያንዳንዱ ጥያቄ 90 ሰከንድ አለዎት። መመለስ አይቻልም!");
-    
-    const subjectArea = document.getElementById('subject-area');
-    subjectArea.innerHTML = `
+    const area = document.getElementById('subject-area');
+    area.innerHTML = `
         <h3>ብሔራዊ ፈተና መለማመጃ</h3>
-        <div id="timer" style="font-size: 20px; color: red; font-weight: bold;">ጊዜ፡ 90s</div>
-        <div id="question-box" style="margin-top: 20px;">
-            <p>1. ከሚከተሉት ውስጥ የሴል (Cell) ግኝት ያደረገው ማን ነው?</p>
-            <button onclick="nextQuestion(true)">A. Robert Hooke</button>
-            <button onclick="nextQuestion(false)">B. Isaac Newton</button>
-            <button onclick="nextQuestion(false)">C. Charles Darwin</button>
+        <div id="timer" style="color:red; font-size:24px;">ጊዜ: 90s</div>
+        <div id="q-container">
+            <p>1. የኢትዮጵያ ረጅሙ ተራራ ማን ይባላል?</p>
+            <button onclick="endExam(true)">ራስ ዳሸን</button>
+            <button onclick="endExam(false)">ባቱ</button>
         </div>
     `;
 
-    timer = setInterval(() => {
+    examTimer = setInterval(() => {
         timeLeft--;
-        document.getElementById('timer').innerText = "ጊዜ፡ " + timeLeft + "s";
+        document.getElementById('timer').innerText = "ጊዜ: " + timeLeft + "s";
         if (timeLeft <= 0) {
-            clearInterval(timer);
-            alert("ጊዜዎ አልቋል!");
+            clearInterval(examTimer);
+            alert("ጊዜ አልቋል!");
             location.reload();
         }
     }, 1000);
 }
 
-function nextQuestion(isCorrect) {
-    clearInterval(timer);
-    if (isCorrect) {
-        alert("ትክክል! ውጤትዎ፡ 1/1");
-    } else {
-        alert("ተሳስተዋል! ውጤትዎ፡ 0/1");
-    }
-    location.reload(); // ለጊዜው ወደ ዋናው ይመልሳል
-}
-
-function goBack() {
+function endExam(isCorrect) {
+    clearInterval(examTimer);
+    alert(isCorrect ? "ትክክል! ውጤት: 1/1" : "ተሳስተዋል! ውጤት: 0/1");
     location.reload();
 }
+
+// 4. Admin OCR & Controls
+function showAdminOptions() {
+    const adminDiv = document.createElement('div');
+    adminDiv.innerHTML = `
+        <hr>
+        <h4>የአስተዳዳሪ ክፍል</h4>
+        <button onclick="triggerOCR()">📸 ፎቶ ወደ ጥያቄ ቀይር</button>
+        <button onclick="alert('መልዕክት ተልኳል!')">📢 መመሪያ አስተላልፍ</button>
+    `;
+    document.getElementById('main-dashboard').appendChild(adminDiv);
+}
+
+function triggerOCR() {
+    alert("የካሜራ ፈቃድ እየተጠየቀ ነው... ፎቶውን ሲያነሱት ቀጥታ ወደ ፅሁፍ ይቀየራል።");
+    // እዚህ ጋር ለወደፊት Tesseract.js እንጨምራለን
+}
+
+function goBack() { location.reload(); }
