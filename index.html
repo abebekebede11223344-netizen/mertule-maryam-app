@@ -9,59 +9,56 @@
 </head>
 <body>
     <div id="splash-screen">
-        <div class="splash-frame">
-            <p style="font-size: 1.2rem;">እንኳን ወደ መርጡለ ማሪያም School app በደህና መጣችሁ</p>
-            <h1 style="font-size: 2.2rem;">በበረከት ቀናው የተዘጋጀ</h1>
+        <div class="splash-text">
+            <h2>እንኳን ወደ መርጡለ ማሪያም School app በደህና መጣቹህ</h2>
+            <h1 style="background: white; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-image: linear-gradient(45deg, #ff00cc, #3333ff);">በ በረከት ቀናው የተዘጋጀ</h1>
         </div>
     </div>
 
     <div id="registration-page" class="hidden">
         <div class="container">
-            <h2 style="text-align:center; color:#1e3a8a;">የምዝገባ ፎርም</h2>
-            <input type="text" id="fname" placeholder="ሙሉ ስም">
-            <select id="role" onchange="toggleCodeInput()">
+            <h3>የምዝገባ ፎርም</h3>
+            <input type="text" id="fname" placeholder="ስም">
+            <input type="text" id="lname" placeholder="የአባት ስም">
+            <input type="tel" id="phone" placeholder="የቴሌ ስልክ ብቻ (09/07...)">
+            <input type="number" id="age" placeholder="እድሜ">
+            <select id="gender"><option value="ወንድ">ወንድ</option><option value="ሴት">ሴት</option></select>
+            <select id="role" onchange="toggleCode()">
                 <option value="student">ተማሪ</option>
                 <option value="teacher">መምህር</option>
-                <option value="admin">አስተዳዳሪ</option>
+                <option value="admin">ርዕሰ መምህር /አስተዳደር</option>
             </select>
-            <div id="code-section" class="hidden">
-                <input type="password" id="access-code" placeholder="የመለያ ኮድ ያስገቡ">
-            </div>
-            <button onclick="handleRegister()">ይግቡ</button>
+            <input type="password" id="code" class="hidden" placeholder="ኮድ ያስገቡ">
+            <button onclick="handleLogin()">ይግቡ</button>
         </div>
     </div>
 
     <div id="main-dashboard" class="hidden">
         <div class="container">
-            <h3 id="welcome-msg"></h3>
+            <div id="announcement-area" style="background:#fef3c7; padding:10px; border-radius:10px; margin-bottom:10px;" class="hidden"></div>
             
-            <div id="admin-tools" class="hidden" style="background:#fff; padding:15px; border-radius:12px; margin-bottom:15px;">
-                <h4 style="margin-top:0;">የፋይል መጫኛ (Admin/Teacher)</h4>
-                <button onclick="document.getElementById('file-input').click()" style="background:#059669;">📸 ፎቶ/ፋይል ይምረጡ</button>
-                <input type="file" id="file-input" class="hidden" accept="image/*,video/*,.pdf">
+            <div id="admin-tools" class="hidden">
+                <textarea id="notice-msg" placeholder="ለሁሉም የሚተላለፍ ማስታወቂያ..." style="width:100%; border-radius:10px; padding:10px;"></textarea>
+                <button onclick="sendNotice()" style="background:#059669;">ማስታወቂያ አስተላልፍ 📢</button>
+                <button onclick="document.getElementById('file-up').click()">📸 ፋይል/ፎቶ/ቪዲዮ ይጫኑ</button>
+                <input type="file" id="file-up" class="hidden" accept="image/*,video/*,.pdf" multiple>
             </div>
 
-            <div id="grade-selection">
-                <h4>ክፍል ይምረጡ</h4>
-                <div class="subject-grid">
-                    <button onclick="showSubjects(9)">9ኛ ክፍል</button>
-                    <button onclick="showSubjects(10)">10ኛ ክፍል</button>
-                    <button onclick="showSubjects(11)">11ኛ ክፍል</button>
-                    <button onclick="showSubjects(12)">12ኛ ክፍል</button>
-                </div>
+            <div id="grade-view">
+                <h3 style="color:#1e3a8a;">የክፍል ደረጃዎች</h3>
+                <button class="grade-btn" onclick="showSubjects(9)">9ኛ ክፍል (2018)</button>
+                <button class="grade-btn" onclick="showSubjects(10)">10ኛ ክፍል (2018)</button>
+                <button class="grade-btn" onclick="showSubjects(11)">11ኛ ክፍል (Social/Natural)</button>
+                <button class="grade-btn" onclick="showSubjects(12)">12ኛ ክፍል (Social/Natural)</button>
             </div>
 
-            <div id="subject-section" class="hidden">
-                <button onclick="backToGrades()" style="background:#6b7280;">ወደ ኋላ</button>
-                <h4 id="grade-title"></h4>
-                <div id="stream-selection" class="hidden">
-                    <button onclick="setStream('Natural')">Natural Stream</button>
-                    <button onclick="setStream('Social')">Social Stream</button>
-                </div>
-                <div id="subject-list" class="subject-grid"></div>
+            <div id="content-view" class="hidden">
+                <button class="back-btn" onclick="goBack()">⬅ ተመለስ</button>
+                <h4 id="title-text"></h4>
+                <div id="list-area"></div>
             </div>
-
-            <button class="logout-btn" onclick="logOut()">Log Out (ውጣ)</button>
+            
+            <button onclick="logOut()" style="background:red; margin-top:20px;">Log Out (ውጣ)</button>
         </div>
     </div>
 
