@@ -7,7 +7,6 @@
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e3a8a">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -49,7 +48,7 @@
     <div id="main-dashboard" class="hidden">
         <div class="header">
             <input type="text" id="search-box" placeholder="ከአፑ ውስጥ ይፈልጉ...">
-            <button id="back-btn" onclick="goBack()">ተመለስ</button>
+            <button id="back-btn" onclick="goBack()">ወደ ኋላ</button>
         </div>
 
         <div id="grade-selection" class="container">
@@ -71,12 +70,14 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker Registered'))
-                    .catch(err => console.log('Service Worker Failed', err));
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('አፑ ኦፍላይን ለመስራት ዝግጁ ነው!'))
+                    .catch(err => console.log('የኦፍላይን ሲስተም ስህተት:', err));
             });
         }
     </script>
+
     <script src="app.js"></script>
+
 </body>
 </html>
