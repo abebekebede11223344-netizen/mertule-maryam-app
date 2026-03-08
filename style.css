@@ -1,26 +1,20 @@
-body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
+body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f7f6; }
 .hidden { display: none !important; }
 
 /* ያሸበረቀ ስፕላሽ ስክሪን */
 #splash-screen {
     position: fixed; width: 100%; height: 100vh;
-    background: linear-gradient(45deg, #1e3a8a, #d946ef, #3b82f6);
-    display: flex; justify-content: center; align-items: center; z-index: 3000;
+    background: linear-gradient(135deg, #1e3a8a, #8b5cf6, #ec4899);
+    display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5000;
 }
-.splash-frame {
-    border: 4px solid #fff; padding: 30px; border-radius: 25px;
-    text-align: center; color: white; backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
+.splash-text { color: white; text-align: center; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
 
-/* ኮንቴይነር */
-.container { padding: 20px; max-width: 500px; margin: auto; }
+.container { padding: 15px; max-width: 600px; margin: auto; }
 button { 
-    width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; border: none;
-    background: #1e3a8a; color: white; font-weight: bold; cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s;
+    width: 100%; padding: 16px; margin: 10px 0; border-radius: 15px; border: none;
+    background: #1e3a8a; color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
 }
-button:hover { background: #2563eb; transform: translateY(-2px); }
-.logout-btn { background: #ef4444 !important; margin-top: 20px; }
-input, select { width: 94%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; }
-.subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.back-btn { background: #64748b !important; width: auto; padding: 10px 20px; }
+.grade-btn { background: linear-gradient(90deg, #3b82f6, #2dd4bf); }
+input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
