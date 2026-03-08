@@ -1,0 +1,15 @@
+{
+  "name": "Mertule Maryam School",
+  "short_name": "MertuleApp",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2997/2997300.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
